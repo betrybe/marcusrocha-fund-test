@@ -5,7 +5,22 @@ async function load(){
 
   const search = await fetch(urlApiML);
   const resultJson = await search.json();
+
+  insertItems(resultJson);
 } 
+  
+function insertItems(resultJson) {
+  
+  var items = document.querySelector('.items')
+  
+  for (let index = 0; index < resultJson.results.length; index++) {
+    var titulo = document.createElement('h1');
+    var texto  = document.createTextNode(resultJson.results[index].title);
+    titulo.appendChild(texto);
+    
+    items.appendChild(titulo);
+  }
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -49,4 +64,4 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = () => { };
+window.onload = () => { load() };
