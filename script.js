@@ -1,3 +1,12 @@
+async function load(){
+  
+  const input_search = "Computador";
+  const urlApiML = `https://api.mercadolibre.com/sites/MLB/search?q=${input_search}`;
+
+  const search = await fetch(urlApiML);
+  const resultJson = await search.json();
+} 
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
