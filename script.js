@@ -14,11 +14,21 @@ function insertItems(resultJson) {
   var items = document.querySelector('.items')
   
   for (let index = 0; index < resultJson.results.length; index++) {
-    var titulo = document.createElement('h1');
-    var texto  = document.createTextNode(resultJson.results[index].title);
-    titulo.appendChild(texto);
+
+    var sectionNew = document.createElement("SECTION");
+    sectionNew.setAttribute("class", "item")
+
+    var title = document.createElement("p");
+
+    var descriptionTitle  = document.createTextNode(resultJson.results[index].title);
+    title.appendChild(descriptionTitle);
+
+    title.setAttribute("class", "item__title")
+
+    sectionNew.appendChild(title);
     
-    items.appendChild(titulo);
+    items.appendChild(sectionNew);
+
   }
 }
 
