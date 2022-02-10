@@ -19,16 +19,15 @@ function insertItems(resultJson) {
     sectionNew.setAttribute("class", "item")
 
     var title = document.createElement("p");
-
     var descriptionTitle  = document.createTextNode(resultJson.results[index].title);
     title.appendChild(descriptionTitle);
-
     title.setAttribute("class", "item__title")
-
     sectionNew.appendChild(title);
+
+    var img = createProductImageElement(resultJson.results[index].thumbnail);
+    sectionNew.appendChild(img);
     
     items.appendChild(sectionNew);
-
   }
 }
 
