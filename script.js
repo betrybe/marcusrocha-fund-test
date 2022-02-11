@@ -15,7 +15,7 @@ async function apiAccess(urlAPI, search){
   
 function insertItems(resultJson) {
   
-  var items = document.querySelector('.items')
+  var items = document.querySelector('.items');
   
   for (let index = 0; index < resultJson.results.length; index++) {
 
@@ -72,7 +72,15 @@ async function addProductItem(search){
   
   const resultJson = await apiAccess(urlAPI, search);
 
-  console.log(resultJson);
+  const sku = resultJson.id;
+  const name = resultJson.title;
+  const salePrice = resultJson.price;
+
+  var item = document.querySelector('ol');
+
+  var newItem = createCartItemElement({ sku, name, salePrice });
+
+  item.appendChild(newItem);
 }
 
 function cartItemClickListener(event) {
