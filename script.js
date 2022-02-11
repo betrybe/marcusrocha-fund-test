@@ -15,20 +15,18 @@ function insertItems(resultJson) {
   
   for (let index = 0; index < resultJson.results.length; index++) {
 
-    var sectionNew = document.createElement("SECTION");
-    sectionNew.setAttribute("class", "item")
-
-    var title = document.createElement("p");
-    var descriptionTitle  = document.createTextNode(resultJson.results[index].title);
-    title.appendChild(descriptionTitle);
-    title.setAttribute("class", "item__title")
-    sectionNew.appendChild(title);
-
-    var img = createProductImageElement(resultJson.results[index].thumbnail);
-    sectionNew.appendChild(img);
+    const sku = resultJson.results[index].id;
+    const name = resultJson.results[index].title;
+    const image = resultJson.results[index].thumbnail;
     
+    var sectionNew = (createProductItemElement({ sku, name, image }));
+
     items.appendChild(sectionNew);
   }
+}
+
+function addindProduct(){
+  alert("Produto adicionado função");
 }
 
 function createProductImageElement(imageSource) {
@@ -62,7 +60,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
