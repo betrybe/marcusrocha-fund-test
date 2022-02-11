@@ -90,6 +90,7 @@ async function addProductItem(search){
   item.appendChild(newItem);
 
   totalPrice(salePrice, op);
+  localStorageManage({ sku, name, salePrice }, op);
 }
  
 function totalPrice(salePrice, op) {
@@ -107,9 +108,27 @@ function totalPrice(salePrice, op) {
   tag.innerHTML=newValue;
 }
 
+function localStorageManage({ sku, name, salePrice }, op) {
+
+  let lsProducts = JSON.parse(localStorage.getItem('products')) || [];
+
+  const product = {
+    'sku': sku,
+    'name': name,
+    'salePrice': salePrice
+  }
+
+  lsProducts.push(product);
+  
+  localStorage.setItem('products', JSON.stringify(lsProducts));
+
+}
+
 function cartItemClickListener(event) {
+
   const op = OP.LESS;
-  var salePrice = Number(event.srcElement.innerText.split("$",2)[1]);
+  const product = event.srcElement.innerText;
+  var salePrice = Number(product.split("$",2)[1]);
   
   totalPrice(salePrice, op);
 }
