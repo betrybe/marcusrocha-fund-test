@@ -94,7 +94,7 @@ async function addProductItem(search){
  
 function totalPrice(salePrice, op) {
 
-  var tag = document.querySelector('.total_price .value');
+  var tag = document.querySelector('.total-price');
   const value = Number(tag.innerHTML);
   var newValue = 0;
 
@@ -110,10 +110,7 @@ function totalPrice(salePrice, op) {
 function cartItemClickListener(event) {
   const op = OP.LESS;
   var salePrice = Number(event.srcElement.innerText.split("$",2)[1]);
-  console.log(event);
-  console.log(event.srcElement.innerText);
-  console.log(salePrice);
-  console.log(typeof salePrice);
+  
   totalPrice(salePrice, op);
 }
 
