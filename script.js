@@ -1,13 +1,17 @@
 async function load(){
   
-  const input_search = "Computador";
-  const urlApiML = `https://api.mercadolibre.com/sites/MLB/search?q=${input_search}`;
+  const search = "Computador";
+  const urlAPI = `https://api.mercadolibre.com/sites/MLB/search?q=`;
 
-  const search = await fetch(urlApiML);
-  const resultJson = await search.json();
+  const resultJson = await apiAccess(urlAPI, search);
 
   insertItems(resultJson);
 } 
+
+async function apiAccess(urlAPI, search){
+  const result = await fetch(`${urlAPI}${search}`);
+  return await result.json();
+}
   
 function insertItems(resultJson) {
   
