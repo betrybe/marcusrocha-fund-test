@@ -100,7 +100,7 @@ function totalPrice(salePrice, op) {
 
   if(op==OP.ADD) {
     newValue = value + salePrice;
-  } else if (op==operation.LESS) {
+  } else if (op==OP.LESS) {
     newValue = value - salePrice;
   }
 
@@ -108,8 +108,13 @@ function totalPrice(salePrice, op) {
 }
 
 function cartItemClickListener(event) {
-  
-  
+  const op = OP.LESS;
+  var salePrice = Number(event.srcElement.innerText.split("$",2)[1]);
+  console.log(event);
+  console.log(event.srcElement.innerText);
+  console.log(salePrice);
+  console.log(typeof salePrice);
+  totalPrice(salePrice, op);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
