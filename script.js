@@ -47,7 +47,7 @@ function createCustomButtonElement(element, className, innerText, itemID) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
-  e.addEventListener("click",cartItemClickListener.bind(null, itemID));
+  e.addEventListener("click",addProductItem.bind(null, itemID));
   return e;
 }
 
@@ -67,11 +67,17 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  //const a = getSkuFromProductItem(event);
+async function addProductItem(search){
+  const urlAPI = "https://api.mercadolibre.com/items/";
+  
+  const resultJson = await apiAccess(urlAPI, search);
 
-  const urlApiItem = `https://api.mercadolibre.com/items/${event}`;
-  console.log(urlApiItem);
+  console.log(resultJson);
+}
+
+function cartItemClickListener(event) {
+  
+  
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
