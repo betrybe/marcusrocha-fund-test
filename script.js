@@ -1,8 +1,3 @@
-var OP = {
-  ADD: 1,
-  LESS: 2
-}
-
 
 async function load(){
   
@@ -17,17 +12,28 @@ async function load(){
 
 async function apiAccess(urlAPI, search){
   
-  alterLoading("block");
+  await createLoad("");
   const result = await fetch(`${urlAPI}${search}`);
   const resultJson =  await result.json();
-  alterLoading("none");
+  await removeLoad("none");
   
   return resultJson;
 }
 
-function alterLoading(option) {
-  document.getElementById("loader").style.display = option;
+function createLoad() {
+
+  var divLoad = document.createElement('div');
+  divLoad.className = 'loading';
+  document.body.appendChild(divLoad);
+  
 }
+
+function removeLoad(){
+  var divLoad = document.getElementsByClassName('loading');
+  divLoad[0].remove();
+}
+
+
   
 async function insertItems(resultJson) {
   
@@ -133,7 +139,6 @@ function removeAllItensCart(){
 }
 
 async function addProductItem(search){
-  const op = OP.ADD;
   const urlAPI = "https://api.mercadolibre.com/items/";
   
   const resultJson = await apiAccess(urlAPI, search);
@@ -145,10 +150,10 @@ async function addProductItem(search){
   var item = document.querySelector('ol');
   var newItem = createCartItemElement({ sku, name, salePrice });
   item.appendChild(newItem);
-  localStorageManage({ sku, name, salePrice }, op);
+  localStorageManage({ sku, name, salePrice });
 }
 
-function localStorageManage({ sku, name, salePrice }, op) {
+function localStorageManage({ sku, name, salePrice }) {
 
   let lsProducts = JSON.parse(localStorage.getItem('products')) || [];
 
