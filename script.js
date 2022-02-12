@@ -10,14 +10,23 @@ async function load(){
   const urlAPI = `https://api.mercadolibre.com/sites/MLB/search?q=`;
 
   const resultJson = await apiAccess(urlAPI, search);
-
+  //document.querySelector('loader').style.display = "none";
   insertItems(resultJson);
   verifyLocalStorage();
 } 
 
 async function apiAccess(urlAPI, search){
+  
+  alterLoading("block");
   const result = await fetch(`${urlAPI}${search}`);
-  return await result.json();
+  const resultJson =  await result.json();
+  alterLoading("none");
+  
+  return resultJson;
+}
+
+function alterLoading(option) {
+  document.getElementById("loader").style.display = option;
 }
   
 async function insertItems(resultJson) {
