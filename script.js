@@ -47,10 +47,28 @@ function verifyLocalStorage() {
 
       var item = document.querySelector('ol');
       var newItem = createCartItemElement({ sku, name, salePrice });
-      item.appendChild(newItem);
+      item.appendChild(newItem);  
     }
-    
+    sumPrice();
   }
+}
+
+function sumPrice(){
+  if(localStorage.getItem('products')!=null){
+    let lsProducts = JSON.parse(localStorage.getItem('products'));
+    var totalPrice = 0;
+    for (let index = 0; index < lsProducts.length; index++){
+      var salePrice = lsProducts[index].salePrice;
+      totalPrice += salePrice;
+    }
+    console.log("totalprice"+ totalPrice);
+    refreshPrice(totalPrice);
+  }
+}
+ 
+function refreshPrice(price) {
+  var tag = document.querySelector('.total-price');
+  tag.innerHTML=price;
 }
 
 function createProductImageElement(imageSource) {
@@ -104,24 +122,7 @@ async function addProductItem(search){
   var item = document.querySelector('ol');
   var newItem = createCartItemElement({ sku, name, salePrice });
   item.appendChild(newItem);
-
-  totalPrice(salePrice, op);
   localStorageManage({ sku, name, salePrice }, op);
-}
- 
-function totalPrice(salePrice, op) {
-
-  var tag = document.querySelector('.total-price');
-  const value = Number(tag.innerHTML);
-  var newValue = 0;
-
-  if(op==OP.ADD) {
-    newValue = value + salePrice;
-  } else if (op==OP.LESS) {
-    newValue = value - salePrice;
-  }
-
-  tag.innerHTML=newValue;
 }
 
 function localStorageManage({ sku, name, salePrice }, op) {
@@ -135,9 +136,8 @@ function localStorageManage({ sku, name, salePrice }, op) {
   }
 
   lsProducts.push(product);
-  
   localStorage.setItem('products', JSON.stringify(lsProducts));
-
+  sumPrice();
 }
 
 function cartItemClickListener(event) {
@@ -145,12 +145,10 @@ function cartItemClickListener(event) {
   const op = OP.LESS;
   const product = event.srcElement.innerText;
   var salePrice = Number(product.split("$",2)[1]);
-  
-  totalPrice(salePrice, op);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
-  console.log(sku+"-createCartItemElement");
+  //console.log(sku+"-createCartItemElement");
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
