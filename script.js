@@ -49,20 +49,20 @@ function verifyLocalStorage() {
       var newItem = createCartItemElement({ sku, name, salePrice });
       item.appendChild(newItem);  
     }
-    sumPrice();
   }
+  sumPrice();
 }
 
 function sumPrice(){
+  var totalPrice = 0;
   if(localStorage.getItem('products')!=null){
     let lsProducts = JSON.parse(localStorage.getItem('products'));
-    var totalPrice = 0;
     for (let index = 0; index < lsProducts.length; index++){
       var salePrice = lsProducts[index].salePrice;
       totalPrice += salePrice;
     }
-    refreshPrice(totalPrice);
   }
+  refreshPrice(totalPrice);
 }
  
 function refreshPrice(price) {
@@ -153,8 +153,20 @@ function cartItemClickListener(event) {
       }
     }
     localStorage.setItem('products', JSON.stringify(lsProducts));
+  }
+}
+
+function removeAllItems(){
+  if(localStorage.getItem('products')!=null){
+
+    const elements = document.getElementsByClassName("cart__item");
+    while (elements.length > 0) elements[0].remove();
+  
+    localStorage.removeItem('products');
     verifyLocalStorage();
   }
+  
+
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
