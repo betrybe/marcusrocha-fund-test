@@ -61,7 +61,6 @@ function sumPrice(){
       var salePrice = lsProducts[index].salePrice;
       totalPrice += salePrice;
     }
-    console.log("totalprice"+ totalPrice);
     refreshPrice(totalPrice);
   }
 }
@@ -141,10 +140,21 @@ function localStorageManage({ sku, name, salePrice }, op) {
 }
 
 function cartItemClickListener(event) {
-
-  const op = OP.LESS;
+  
   const product = event.srcElement.innerText;
-  var salePrice = Number(product.split("$",2)[1]);
+  var sku = product.split(" ",2)[1];
+
+  if(localStorage.getItem('products')!=null){
+    let lsProducts = JSON.parse(localStorage.getItem('products'));
+
+    for (let index = 0; index < lsProducts.length; index++){
+      if(lsProducts[index].sku === sku){
+        lsProducts.splice(index,1);
+      }
+    }
+    localStorage.setItem('products', JSON.stringify(lsProducts));
+    verifyLocalStorage();
+  }
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
