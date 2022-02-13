@@ -24,6 +24,7 @@ function createLoad() {
 
   var divLoad = document.createElement('div');
   divLoad.className = 'loading';
+  divLoad.innerHTML = 'loading...';
   document.body.appendChild(divLoad);
   
 }
