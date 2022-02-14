@@ -5,7 +5,7 @@ async function load(){
   const urlAPI = `https://api.mercadolibre.com/sites/MLB/search?q=`;
 
   const resultJson = await apiAccess(urlAPI, search);
-  //document.querySelector('loader').style.display = "none";
+  
   insertItems(resultJson);
   verifyLocalStorage();
 } 
@@ -189,7 +189,7 @@ async function cartItemClickListener(event) {
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
-  //console.log(sku+"-createCartItemElement");
+  
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
