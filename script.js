@@ -1,12 +1,11 @@
-
 function createLoad() {
-  let divLoad = document.createElement('div');
+  const divLoad = document.createElement('div');
   divLoad.className = 'loading';
   divLoad.innerHTML = 'loading...';
   document.body.appendChild(divLoad);
 }
 
-function removeLoad(){
+function removeLoad() {
   let divLoad = document.getElementsByClassName('loading');
   divLoad[0].remove();
 }
@@ -35,7 +34,7 @@ function verifyLocalStorage() {
   sumPrice();
 }
 
-function sumPrice(){
+function sumPrice() {
   let totalPrice = 0;
   if (localStorage.getItem('products') != null){
     const lsProducts = JSON.parse(localStorage.getItem('products'));
@@ -102,7 +101,7 @@ function removeAllItensCart(){
   while (elements.length > 0) elements[0].remove();
 }
 
-async function addProductItem(search){
+async function addProductItem(search) {
   const urlAPI = "https://api.mercadolibre.com/items/";
   const resultJson = await apiAccess(urlAPI, search);
   const sku = resultJson.id;
@@ -150,7 +149,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-async function apiAccess(urlAPI, search){
+async function apiAccess(urlAPI, search) {
   await createLoad("");
   const result = await fetch(`${urlAPI}${search}`);
   const resultJson =  await result.json();
