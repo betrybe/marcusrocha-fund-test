@@ -30,7 +30,7 @@ async function insertItems(resultJson) {
 }
 
 function verifyLocalStorage() {
-  if (localStorage.getItem('products')!=null){
+  if (localStorage.getItem('products') != null){
     let lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
       const sku = lsProducts[index].sku;
@@ -46,7 +46,7 @@ function verifyLocalStorage() {
 
 function sumPrice(){
   let totalPrice = 0;
-  if (localStorage.getItem('products')!=null){
+  if (localStorage.getItem('products') != null){
     let lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
       let salePrice = lsProducts[index].salePrice;
@@ -99,7 +99,7 @@ function getSkuFromProductItem(item) {
 }
 
 async function removeAllItems(){
-  if (localStorage.getItem('products')!=null){
+  if (localStorage.getItem('products') != null){
     await removeAllItensCart()
     localStorage.removeItem('products');
     verifyLocalStorage();
@@ -124,7 +124,7 @@ async function addProductItem(search){
 }
 
 function localStorageManage({ sku, name, salePrice }) {
-  let lsProducts = JSON.parse(localStorage.getItem('products')) || [];
+  const lsProducts = JSON.parse(localStorage.getItem('products')) || [];
   const product = {
     'sku': sku,
     'name': name,
@@ -138,7 +138,7 @@ function localStorageManage({ sku, name, salePrice }) {
 async function cartItemClickListener(event) {
   const product = event.srcElement.innerText;
   let sku = product.split(" ",2)[1];
-  if (localStorage.getItem('products')!=null){
+  if (localStorage.getItem('products') != null){
     let lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
       if (lsProducts[index].sku === sku){
