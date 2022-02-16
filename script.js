@@ -61,12 +61,9 @@ function localStorageManage({ sku, name, salePrice }) {
   sumPrice();
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
+function removeAllItensCart() {
+  const elements = document.getElementsByClassName("cart__item");
+  while (elements.length > 0) elements[0].remove();
 }
 
 function verifyLocalStorage() {
@@ -83,11 +80,6 @@ function verifyLocalStorage() {
   sumPrice();
 }
 
-function removeAllItensCart() {
-  const elements = document.getElementsByClassName("cart__item");
-  while (elements.length > 0) elements[0].remove();
-}
-
 async function cartItemClickListener(event) {
   const product = event.srcElement.innerText;
   let sku = product.split(" ", 2)[1];
@@ -102,6 +94,14 @@ async function cartItemClickListener(event) {
     await removeAllItensCart()
     verifyLocalStorage();
   }
+}
+
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
 }
 
 async function addProductItem(search) {
