@@ -90,12 +90,12 @@ function removeAllItensCart() {
 
 async function cartItemClickListener(event) {
   const product = event.srcElement.innerText;
-  let sku = product.split(" ",2)[1];
+  let sku = product.split(" ", 2)[1];
   if (localStorage.getItem('products') != null){
     const lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
       if (lsProducts[index].sku === sku){
-        lsProducts.splice(index,1);
+        lsProducts.splice(index, 1);
       }
     }
     localStorage.setItem('products', JSON.stringify(lsProducts));
@@ -118,7 +118,7 @@ function createCustomButtonElement(element, className, innerText, itemID) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
-  e.addEventListener("click",addProductItem.bind(null, itemID));
+  e.addEventListener("click", addProductItem.bind(null, itemID));
   return e;
 }
 
