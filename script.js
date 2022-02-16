@@ -1,10 +1,3 @@
-async function apiAccess(urlAPI, search){
-  await createLoad("");
-  const result = await fetch(`${urlAPI}${search}`);
-  const resultJson =  await result.json();
-  await removeLoad("none");
-  return resultJson;
-}
 
 function createLoad() {
   let divLoad = document.createElement('div');
@@ -19,23 +12,21 @@ function removeLoad(){
 }
 
 async function insertItems(resultJson) {  
-  let items = document.querySelector('.items');
+  const items = document.querySelector('.items');
   for (let index = 0; index < resultJson.results.length; index++) {
-    const sku = resultJson.results[index].id;
-    const name = resultJson.results[index].title;
-    const image = resultJson.results[index].thumbnail;
-    let sectionNew = (createProductItemElement({ sku, name, image }));
+    const item = resultJson.results[index];
+    const [sku, name, image] = [item.id, item.title, item.thumbnail];
+    const sectionNew = (createProductItemElement({ sku, name, image }));
     items.appendChild(sectionNew);
   }
 }
 
 function verifyLocalStorage() {
   if (localStorage.getItem('products') != null){
-    let lsProducts = JSON.parse(localStorage.getItem('products'));
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
-      const sku = lsProducts[index].sku;
-      const name = lsProducts[index].name;
-      const salePrice = lsProducts[index].salePrice;
+      const itemStorage = lsProducts[index];
+      const [sku, name, salePrice] = [itemStorage.sku, itemStorage.name, itemStorage.salePrice];
       const item = document.querySelector('ol');
       const newItem = createCartItemElement({ sku, name, salePrice });
       item.appendChild(newItem);  
@@ -47,7 +38,7 @@ function verifyLocalStorage() {
 function sumPrice(){
   let totalPrice = 0;
   if (localStorage.getItem('products') != null){
-    let lsProducts = JSON.parse(localStorage.getItem('products'));
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
       let salePrice = lsProducts[index].salePrice;
       totalPrice += salePrice;
@@ -139,7 +130,7 @@ async function cartItemClickListener(event) {
   const product = event.srcElement.innerText;
   let sku = product.split(" ",2)[1];
   if (localStorage.getItem('products') != null){
-    let lsProducts = JSON.parse(localStorage.getItem('products'));
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
     for (let index = 0; index < lsProducts.length; index++){
       if (lsProducts[index].sku === sku){
         lsProducts.splice(index,1);
@@ -157,6 +148,14 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
+}
+
+async function apiAccess(urlAPI, search){
+  await createLoad("");
+  const result = await fetch(`${urlAPI}${search}`);
+  const resultJson =  await result.json();
+  await removeLoad("none");
+  return resultJson;
 }
 
 async function load(){  
