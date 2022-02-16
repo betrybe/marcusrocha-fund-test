@@ -54,10 +54,10 @@ function removeLoad() {
 }
 
 async function apiAccess(urlAPI, search) {
-  await createLoad("");
+  await createLoad();
   const result = await fetch(`${urlAPI}${search}`);
   const resultJson =  await result.json();
-  await removeLoad("none");
+  await removeLoad();
   return resultJson;
 }
 
