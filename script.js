@@ -6,7 +6,7 @@ function createLoad() {
 }
 
 function removeLoad() {
-  let divLoad = document.getElementsByClassName('loading');
+  const divLoad = document.getElementsByClassName('loading');
   divLoad[0].remove();
 }
 
@@ -18,6 +18,23 @@ async function insertItems(resultJson) {
     const sectionNew = (createProductItemElement({ sku, name, image }));
     items.appendChild(sectionNew);
   }
+}
+ 
+function refreshPrice(price) {
+  let tag = document.querySelector('.total-price');
+  tag.innerHTML=price;
+}
+
+function sumPrice() {
+  let totalPrice = 0;
+  if (localStorage.getItem('products') != null){
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
+    for (let index = 0; index < lsProducts.length; index++){
+      const salePrice = lsProducts[index].salePrice;
+      totalPrice += salePrice;
+    }
+  }
+  refreshPrice(totalPrice);
 }
 
 function verifyLocalStorage() {
@@ -32,23 +49,6 @@ function verifyLocalStorage() {
     }
   }
   sumPrice();
-}
-
-function sumPrice() {
-  let totalPrice = 0;
-  if (localStorage.getItem('products') != null){
-    const lsProducts = JSON.parse(localStorage.getItem('products'));
-    for (let index = 0; index < lsProducts.length; index++){
-      let salePrice = lsProducts[index].salePrice;
-      totalPrice += salePrice;
-    }
-  }
-  refreshPrice(totalPrice);
-}
- 
-function refreshPrice(price) {
-  let tag = document.querySelector('.total-price');
-  tag.innerHTML=price;
 }
 
 function createProductImageElement(imageSource) {
@@ -104,9 +104,7 @@ function removeAllItensCart(){
 async function addProductItem(search) {
   const urlAPI = "https://api.mercadolibre.com/items/";
   const resultJson = await apiAccess(urlAPI, search);
-  const sku = resultJson.id;
-  const name = resultJson.title;
-  const salePrice = resultJson.price;
+  const [sku, name, salePrice] = [resultJson.id, resultJson.title, resultJson.price];
   let item = document.querySelector('ol');
   let newItem = createCartItemElement({ sku, name, salePrice });
   item.appendChild(newItem);
