@@ -32,6 +32,60 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
+function sumPrice() {
+  let totalPrice = 0;
+  if (localStorage.getItem('products') != null){
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
+    for (let index = 0; index < lsProducts.length; index++){
+      const salePrice = lsProducts[index].salePrice;
+      totalPrice += salePrice;
+    }
+  }
+  refreshPrice(totalPrice);
+}
+
+function localStorageManage({ sku, name, salePrice }) {
+  const lsProducts = JSON.parse(localStorage.getItem('products')) || [];
+  const product = {
+    'sku': sku,
+    'name': name,
+    'salePrice': salePrice
+  }
+  lsProducts.push(product);
+  localStorage.setItem('products', JSON.stringify(lsProducts));
+  sumPrice();
+}
+
+function verifyLocalStorage() {
+  if (localStorage.getItem('products') != null){
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
+    for (let index = 0; index < lsProducts.length; index++){
+      const itemStorage = lsProducts[index];
+      const [sku, name, salePrice] = [itemStorage.sku, itemStorage.name, itemStorage.salePrice];
+      const item = document.querySelector('ol');
+      const newItem = createCartItemElement({ sku, name, salePrice });
+      item.appendChild(newItem);  
+    }
+  }
+  sumPrice();
+}
+
+async function cartItemClickListener(event) {
+  const product = event.srcElement.innerText;
+  let sku = product.split(" ",2)[1];
+  if (localStorage.getItem('products') != null){
+    const lsProducts = JSON.parse(localStorage.getItem('products'));
+    for (let index = 0; index < lsProducts.length; index++){
+      if (lsProducts[index].sku === sku){
+        lsProducts.splice(index,1);
+      }
+    }
+    localStorage.setItem('products', JSON.stringify(lsProducts));
+    await removeAllItensCart()
+    verifyLocalStorage();
+  }
+}
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -84,44 +138,6 @@ function refreshPrice(price) {
   tag.innerHTML=price;
 }
 
-function sumPrice() {
-  let totalPrice = 0;
-  if (localStorage.getItem('products') != null){
-    const lsProducts = JSON.parse(localStorage.getItem('products'));
-    for (let index = 0; index < lsProducts.length; index++){
-      const salePrice = lsProducts[index].salePrice;
-      totalPrice += salePrice;
-    }
-  }
-  refreshPrice(totalPrice);
-}
-
-function localStorageManage({ sku, name, salePrice }) {
-  const lsProducts = JSON.parse(localStorage.getItem('products')) || [];
-  const product = {
-    'sku': sku,
-    'name': name,
-    'salePrice': salePrice
-  }
-  lsProducts.push(product);
-  localStorage.setItem('products', JSON.stringify(lsProducts));
-  sumPrice();
-}
-
-function verifyLocalStorage() {
-  if (localStorage.getItem('products') != null){
-    const lsProducts = JSON.parse(localStorage.getItem('products'));
-    for (let index = 0; index < lsProducts.length; index++){
-      const itemStorage = lsProducts[index];
-      const [sku, name, salePrice] = [itemStorage.sku, itemStorage.name, itemStorage.salePrice];
-      const item = document.querySelector('ol');
-      const newItem = createCartItemElement({ sku, name, salePrice });
-      item.appendChild(newItem);  
-    }
-  }
-  sumPrice();
-}
-
 function removeAllItensCart(){
   const elements = document.getElementsByClassName("cart__item");
   while (elements.length > 0) elements[0].remove();
@@ -131,22 +147,6 @@ async function removeAllItems(){
   if (localStorage.getItem('products') != null){
     await removeAllItensCart()
     localStorage.removeItem('products');
-    verifyLocalStorage();
-  }
-}
-
-async function cartItemClickListener(event) {
-  const product = event.srcElement.innerText;
-  let sku = product.split(" ",2)[1];
-  if (localStorage.getItem('products') != null){
-    const lsProducts = JSON.parse(localStorage.getItem('products'));
-    for (let index = 0; index < lsProducts.length; index++){
-      if (lsProducts[index].sku === sku){
-        lsProducts.splice(index,1);
-      }
-    }
-    localStorage.setItem('products', JSON.stringify(lsProducts));
-    await removeAllItensCart()
     verifyLocalStorage();
   }
 }
