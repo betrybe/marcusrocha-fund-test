@@ -1,23 +1,3 @@
-async function apiAccess(urlAPI, search) {
-  await createLoad("");
-  const result = await fetch(`${urlAPI}${search}`);
-  const resultJson =  await result.json();
-  await removeLoad("none");
-  return resultJson;
-}
-
-function localStorageManage({ sku, name, salePrice }) {
-  const lsProducts = JSON.parse(localStorage.getItem('products')) || [];
-  const product = {
-    'sku': sku,
-    'name': name,
-    'salePrice': salePrice
-  }
-  lsProducts.push(product);
-  localStorage.setItem('products', JSON.stringify(lsProducts));
-  sumPrice();
-}
-
 function createLoad() {
   const divLoad = document.createElement('div');
   divLoad.className = 'loading';
@@ -28,6 +8,36 @@ function createLoad() {
 function removeLoad() {
   const divLoad = document.getElementsByClassName('loading');
   divLoad[0].remove();
+}
+
+async function apiAccess(urlAPI, search) {
+  await createLoad("");
+  const result = await fetch(`${urlAPI}${search}`);
+  const resultJson =  await result.json();
+  await removeLoad("none");
+  return resultJson;
+}
+
+function createCustomElement(element, className, innerText) {
+  const e = document.createElement(element);
+  e.className = className;
+  e.innerText = innerText;
+  return e;
+}
+
+function createProductImageElement(imageSource) {
+  const img = document.createElement('img');
+  img.className = 'item__image';
+  img.src = imageSource;
+  return img;
+}
+
+function createCustomButtonElement(element, className, innerText, itemID) {
+  const e = document.createElement(element);
+  e.className = className;
+  e.innerText = innerText;
+  e.addEventListener("click",addProductItem.bind(null, itemID));
+  return e;
 }
 
 function createProductItemElement({ sku, name, image }) {
@@ -68,12 +78,16 @@ function sumPrice() {
   refreshPrice(totalPrice);
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
+function localStorageManage({ sku, name, salePrice }) {
+  const lsProducts = JSON.parse(localStorage.getItem('products')) || [];
+  const product = {
+    'sku': sku,
+    'name': name,
+    'salePrice': salePrice
+  }
+  lsProducts.push(product);
+  localStorage.setItem('products', JSON.stringify(lsProducts));
+  sumPrice();
 }
 
 function verifyLocalStorage() {
@@ -88,42 +102,6 @@ function verifyLocalStorage() {
     }
   }
   sumPrice();
-}
-
-function createProductImageElement(imageSource) {
-  const img = document.createElement('img');
-  img.className = 'item__image';
-  img.src = imageSource;
-  return img;
-}
-
-function createCustomElement(element, className, innerText) {
-  const e = document.createElement(element);
-  e.className = className;
-  e.innerText = innerText;
-  return e;
-}
-
-async function addProductItem(search) {
-  const urlAPI = "https://api.mercadolibre.com/items/";
-  const resultJson = await apiAccess(urlAPI, search);
-  const [sku, name, salePrice] = [resultJson.id, resultJson.title, resultJson.price];
-  let item = document.querySelector('ol');
-  let newItem = createCartItemElement({ sku, name, salePrice });
-  item.appendChild(newItem);
-  localStorageManage({ sku, name, salePrice });
-}
-
-function createCustomButtonElement(element, className, innerText, itemID) {
-  const e = document.createElement(element);
-  e.className = className;
-  e.innerText = innerText;
-  e.addEventListener("click",addProductItem.bind(null, itemID));
-  return e;
-}
-
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
 }
 
 function removeAllItensCart(){
@@ -153,6 +131,28 @@ async function cartItemClickListener(event) {
     await removeAllItensCart()
     verifyLocalStorage();
   }
+}
+
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+async function addProductItem(search) {
+  const urlAPI = "https://api.mercadolibre.com/items/";
+  const resultJson = await apiAccess(urlAPI, search);
+  const [sku, name, salePrice] = [resultJson.id, resultJson.title, resultJson.price];
+  let item = document.querySelector('ol');
+  let newItem = createCartItemElement({ sku, name, salePrice });
+  item.appendChild(newItem);
+  localStorageManage({ sku, name, salePrice });
+}
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
 }
 
 async function load(){  
